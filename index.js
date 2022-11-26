@@ -89,7 +89,12 @@ app.get('/category/:id', async (req, res) => {
 app.post('/users', async (req, res) => {
     try {
         const user = req.body;
-        console.log(user);
+        // console.log(user);
+        const users = await usersCollection.insertOne(user);
+        res.send({
+            success: true,
+            users: users
+        })
 
     } catch (error) {
         res.send({
