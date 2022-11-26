@@ -31,7 +31,7 @@ dbConnect()
 // TODO: Database Collection
 const CategoriesCollection = client.db('oldBookCenter').collection('categories');
 const CategoryCollection = client.db('oldBookCenter').collection('category');
-
+const usersCollection = client.db('oldBookCenter').collection('users');
 
 
 
@@ -63,7 +63,7 @@ app.get('/categories', async (req, res) => {
 })
 
 
-// TODO: send single data according to categories data.
+// TODO: 02: send single data according to categories data.
 app.get('/category/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -85,7 +85,19 @@ app.get('/category/:id', async (req, res) => {
 })
 
 
+// Link : 04: Save User info to database
+app.post('/users', async (req, res) => {
+    try {
+        const user = req.body;
+        console.log(user);
 
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 
 
