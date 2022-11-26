@@ -42,5 +42,93 @@
 		"resalePrice": 700,
 		"useYears": "3 years",
 		"postTime": "November 18, 2022"
+	},
+	{
+		"categories_id": 102,
+		"title": "9th +10th chemistry solved practical book",
+		"location": "Cheema Colony, Gujrat",
+		"photo": "https://i.ibb.co/PWGddmS/9th-10th-chemistry-solved-practical-book.jpg",
+		"condition": "Used",
+		"originalPrice": 1500,
+		"resalePrice": 500,
+		"useYears": "2 years",
+		"postTime": "November 3, 2022"
+	},
+	{
+		"categories_id": 102,
+		"title": "“O” level full course",
+		"location": "Sheikhüpura,Punjab",
+		"photo": "https://i.ibb.co/Rpw9Wyy/O-level-full-course.jpg",
+		"condition": "Used",
+		"originalPrice": 15000,
+		"resalePrice": 6000,
+		"useYears": "1 years",
+		"postTime": "July 21, 2022"
+	},
+	{
+		"categories_id": 102,
+		"title": "‘The Environment of Pakistan’ by Huma Naz Sethi",
+		"location": "Shahtaj Colony Shah Taj Colony, Lahore, Pakistan",
+		"photo": "https://i.ibb.co/5R9fgnj/The-Environment-of-Pakistan.jpg",
+		"condition": "Used",
+		"originalPrice": 1000,
+		"resalePrice": 500,
+		"useYears": "2 years",
+		"postTime": "November 3, 2022"
+	},
+	{
+		"categories_id": 102,
+		"title": "11st physics mcqs with keys",
+		"location": "Qasimabad Phase 1, Hyderabad",
+		"photo": "https://i.ibb.co/s568HP8/11st-physics-mcqs-with-keys.jpg",
+		"condition": "Used",
+		"originalPrice": 1200,
+		"resalePrice": 700,
+		"useYears": "3 years",
+		"postTime": "November 18, 2022"
+	},
+	{
+		"categories_id": 103,
+		"title": "9th +10th chemistry solved practical book",
+		"location": "Cheema Colony, Gujrat",
+		"photo": "https://i.ibb.co/PWGddmS/9th-10th-chemistry-solved-practical-book.jpg",
+		"condition": "Used",
+		"originalPrice": 1500,
+		"resalePrice": 500,
+		"useYears": "2 years",
+		"postTime": "November 3, 2022"
+	},
+	{
+		"categories_id": 106,
+		"title": "“O” level full course",
+		"location": "Sheikhüpura,Punjab",
+		"photo": "https://i.ibb.co/Rpw9Wyy/O-level-full-course.jpg",
+		"condition": "Used",
+		"originalPrice": 15000,
+		"resalePrice": 6000,
+		"useYears": "1 years",
+		"postTime": "July 21, 2022"
+	},
+	{
+		"categories_id": 105,
+		"title": "‘The Environment of Pakistan’ by Huma Naz Sethi",
+		"location": "Shahtaj Colony Shah Taj Colony, Lahore, Pakistan",
+		"photo": "https://i.ibb.co/5R9fgnj/The-Environment-of-Pakistan.jpg",
+		"condition": "Used",
+		"originalPrice": 1000,
+		"resalePrice": 500,
+		"useYears": "2 years",
+		"postTime": "November 3, 2022"
+	},
+	{
+		"categories_id": 104,
+		"title": "11st physics mcqs with keys",
+		"location": "Qasimabad Phase 1, Hyderabad",
+		"photo": "https://i.ibb.co/s568HP8/11st-physics-mcqs-with-keys.jpg",
+		"condition": "Used",
+		"originalPrice": 1200,
+		"resalePrice": 700,
+		"useYears": "3 years",
+		"postTime": "November 18, 2022"
 	}
 ]
