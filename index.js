@@ -268,6 +268,45 @@ app.post('/users', async (req, res) => {
     }
 })
 
+// get all user and show them according to their role
+app.get('/users', async (req, res) => {
+    try {
+        const query = {};
+        const users = await UsersCollection.find(query).toArray();
+
+        res.send({
+            success: false,
+            users: users
+        })
+
+
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
+
+
+
+
+
+// TODO: Add new Price elment to ===> Database =>
+// app.get('/status', async (req, res) => {
+//     const filter = {}
+//     const options = { upsert: true }
+//     const updateDoc = {
+//         $set: {
+//             status: "Not verified"
+//         }
+//     }
+//     const result = await UsersCollection.updateMany(filter, updateDoc, options);
+//     res.send(result)
+// })
+
+
 
 // Link: 04 : save cart Products to database
 app.post('/orders', async (req, res) => {
