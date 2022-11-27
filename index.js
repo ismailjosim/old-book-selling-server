@@ -205,12 +205,15 @@ app.get('/categories', async (req, res) => {
 })
 
 
-// TODO: 02: send single data according to categories data.
-app.get('/category/:id', async (req, res) => {
+
+
+
+// TODO: 02: get products according to products categories
+app.get('/product/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const query = { categories_id: parseInt(id) }
-        const books = await CategoryCollection.find(query).toArray()
+        const books = await ProductsCollection.find(query).toArray()
 
         res.send({
             success: true,
