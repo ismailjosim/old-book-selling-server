@@ -289,7 +289,25 @@ app.get('/users', async (req, res) => {
     }
 })
 
+// TODO: Delete User from database
+app.delete('/user/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) }
+        const user = await UsersCollection.deleteOne(query);
 
+        res.send({
+            success: true,
+            user: user
+        })
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 
 
@@ -299,7 +317,7 @@ app.get('/users', async (req, res) => {
 //     const options = { upsert: true }
 //     const updateDoc = {
 //         $set: {
-//             status: "Not verified"
+//             username: "person"
 //         }
 //     }
 //     const result = await UsersCollection.updateMany(filter, updateDoc, options);
@@ -348,7 +366,6 @@ app.get('/orders', async (req, res) => {
         })
     }
 })
-
 
 
 
