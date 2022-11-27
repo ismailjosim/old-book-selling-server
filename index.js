@@ -60,7 +60,6 @@ dbConnect()
 
 // TODO: Database Collection
 const CategoriesCollection = client.db('oldBookCenter').collection('categories');
-const CategoryCollection = client.db('oldBookCenter').collection('category');
 const ProductsCollection = client.db('oldBookCenter').collection('products');
 const UsersCollection = client.db('oldBookCenter').collection('users');
 const OrdersCollection = client.db('oldBookCenter').collection('orders');
@@ -228,6 +227,27 @@ app.get('/product/:id', async (req, res) => {
         })
     }
 })
+// get all products
+app.get('/products', async (req, res) => {
+    try {
+        const email = req.query.email;
+        const query = { email: email }
+        const products = await ProductsCollection.find(query).toArray()
+        res.send({
+            success: true,
+            products: products
+        })
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
+
+
+
 
 
 // Link : 04: Save User info to database :
@@ -250,13 +270,13 @@ app.post('/users', async (req, res) => {
 
 
 // Link: 04 : save cart Products to database
-app.post('/products', async (req, res) => {
+app.post('/orders', async (req, res) => {
     try {
         const query = req.body;
-        const products = await OrdersCollection.insertOne(query)
+        const orders = await OrdersCollection.insertOne(query)
         res.send({
             success: true,
-            products: products
+            orders: orders
         })
 
     } catch (error) {
@@ -271,8 +291,10 @@ app.post('/products', async (req, res) => {
 
 app.get('/orders', async (req, res) => {
     try {
-        const email = req.query.email;
-        const query = { email: email }
+        // const email = req.query.email;
+        // const query = { email: email }
+
+        const query = {}
         const orders = await OrdersCollection.find(query).toArray();
 
         res.send({
