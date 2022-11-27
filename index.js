@@ -13,6 +13,36 @@ app.use(cors());
 app.use(express.json())
 
 
+
+// link: verifyJWT token function
+// const verifyJWT = (req, res, next) => {
+//     const authHeader = req.headers.authorization;
+//     // console.log(authHeader);
+
+//     if (!authHeader) {
+//         return res.status(401).send('Unauthorized access')
+//     }
+
+//     const token = authHeader.split(' ')[1];
+
+//     jwt.verify(token, process.env.JWT_TOKEN_SECRET, (error, decoded) => {
+//         if (error) {
+//             return res.status(403).send({
+//                 message: "forbidden access"
+//             })
+//         }
+//         req.decoded = decoded
+//         next()
+
+//     })
+// }
+
+
+
+
+
+
+
 // section: URI & Create Client
 const uri = `mongodb+srv://${ process.env.DB_USER }:${ process.env.DB_PASSWORD }@cluster0.s9x13go.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -31,8 +61,8 @@ dbConnect()
 // TODO: Database Collection
 const CategoriesCollection = client.db('oldBookCenter').collection('categories');
 const CategoryCollection = client.db('oldBookCenter').collection('category');
+const ProductsCollection = client.db('oldBookCenter').collection('products');
 const UsersCollection = client.db('oldBookCenter').collection('users');
-// const ProductsCollection = client.db('oldBookCenter').collection('products');
 const OrdersCollection = client.db('oldBookCenter').collection('orders');
 
 
@@ -40,6 +70,117 @@ const OrdersCollection = client.db('oldBookCenter').collection('orders');
 app.get('/', (req, res) => {
     res.send(`<div>old Book Server Connected 🎉</div>`)
 })
+
+
+// script: add new products to database
+app.post('/products', async (req, res) => {
+    try {
+        const product = req.body;
+        const products = await ProductsCollection.insertOne(product);
+
+        res.send({
+            success: true,
+            products: products
+        })
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
+
+
+
+// link: jwt validation
+// app.get('/jwt', async (req, res) => {
+//     try {
+//         const email = req.query.email;
+//         const query = { email: email };
+//         const user = await UsersCollection.findOne(query)
+
+//         if (user) {
+//             const token = jwt.sign(user, process.env.JWT_TOKEN_SECRET, { expiresIn: '7d' });
+//             return res.send({
+//                 success: true,
+//                 token: token
+//             })
+//         }
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// })
+
+// TODO: Verify admin
+// const verifyAdmin = async (req, res, next) => {
+//     try {
+//         const decodedEmail = req.decoded.email;
+
+//         const query = { email: decodedEmail }
+//         const user = await UsersCollection.findOne(query);
+
+//         if (user?.role !== 'admin') {
+//             return res.status(403).send({ message: "Forbidden access" })
+//         }
+//         next()
+
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// }
+// TODO: update user details
+// app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
+
+//     try {
+//         const id = req.params.id;
+//         const filter = { _id: ObjectId(id) };
+//         const options = { upsert: true };
+//         const updateDoc = {
+//             $set: {
+//                 role: 'admin'
+//             }
+//         }
+//         const admin = await UsersCollection.updateOne(filter, updateDoc, options)
+
+//         res.send({
+//             success: true,
+//             admin: admin
+//         })
+
+
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// })
+
+
+// Link: Prevent accessing Admin route via URL
+// app.get('/users/admin/:email', async (req, res) => {
+//     try {
+//         const email = req.params.email;
+//         const query = { email }
+//         const user = await UsersCollection.findOne(query);
+
+//         res.send({ isAdmin: user?.role === 'admin' });
+
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+
+// })
 
 
 // TODO: 01: Get all categories
@@ -90,7 +231,6 @@ app.get('/category/:id', async (req, res) => {
 app.post('/users', async (req, res) => {
     try {
         const user = req.body;
-        // console.log(user);
         const users = await UsersCollection.insertOne(user);
         res.send({
             success: true,
