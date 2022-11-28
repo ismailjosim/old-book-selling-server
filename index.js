@@ -360,6 +360,24 @@ app.get('/users/seller/:email', async (req, res) => {
 
 })
 
+// Link: Prevent accessing seller route via URL
+app.get('/users/buyer/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const query = { email }
+        const user = await UsersCollection.findOne(query);
+
+        res.send({ isBuyer: user?.role === 'Buyer' });
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+
+})
+
 
 
 
