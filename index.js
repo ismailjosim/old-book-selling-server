@@ -295,7 +295,7 @@ app.get('/users', async (req, res) => {
 })
 
 // TODO: Delete User from database
-app.delete('/user/:id', async (req, res) => {
+app.delete('/user/:id', verifyJWT, async (req, res) => {
     try {
         const id = req.params.id;
         const query = { _id: ObjectId(id) }
@@ -313,6 +313,64 @@ app.delete('/user/:id', async (req, res) => {
         })
     }
 })
+// TODO: verify user
+app.patch('/users/verify/:id', verifyJWT, async (req, res) => {
+    try {
+
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+                status: 'verified'
+            }
+        }
+        const result = await UsersCollection.updateOne(filter, updateDoc, options);
+
+        res.send({
+            success: true,
+            result: result
+        })
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+
+})
+
+
+
+// app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
+
+//     try {
+//         const id = req.params.id;
+//         const filter = { _id: ObjectId(id) };
+//         const options = { upsert: true };
+//         const updateDoc = {
+//             $set: {
+//                 role: 'admin'
+//             }
+//         }
+//         const admin = await UsersCollection.updateOne(filter, updateDoc, options)
+
+//         res.send({
+//             success: true,
+//             admin: admin
+//         })
+
+
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// })
+
+
 
 
 
@@ -353,10 +411,9 @@ app.post('/orders', async (req, res) => {
 
 app.get('/orders', async (req, res) => {
     try {
-        // const email = req.query.email;
-        // const query = { email: email }
+        const email = req.query.email;
+        const query = { email: email }
 
-        const query = {}
         const orders = await OrdersCollection.find(query).toArray();
 
         res.send({
