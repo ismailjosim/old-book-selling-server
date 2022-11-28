@@ -342,6 +342,26 @@ app.get('/users/admin/:email', async (req, res) => {
 
 })
 
+// Link: Prevent accessing seller route via URL
+app.get('/users/seller/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const query = { email }
+        const user = await UsersCollection.findOne(query);
+
+        res.send({ isSeller: user?.role === 'Seller' });
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+
+})
+
+
+
 
 // app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
 
