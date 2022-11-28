@@ -162,23 +162,7 @@ app.get('/jwt', async (req, res) => {
 // })
 
 
-// Link: Prevent accessing Admin route via URL
-// app.get('/users/admin/:email', async (req, res) => {
-//     try {
-//         const email = req.params.email;
-//         const query = { email }
-//         const user = await UsersCollection.findOne(query);
 
-//         res.send({ isAdmin: user?.role === 'admin' });
-
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-
-// })
 
 
 // TODO: 01: Get all categories
@@ -340,7 +324,23 @@ app.patch('/users/verify/:id', verifyJWT, async (req, res) => {
     }
 
 })
+// Link: Prevent accessing Admin route via URL
+app.get('/users/admin/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const query = { email }
+        const user = await UsersCollection.findOne(query);
 
+        res.send({ isAdmin: user?.role === 'admin' });
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+
+})
 
 
 // app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
