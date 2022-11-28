@@ -15,27 +15,27 @@ app.use(express.json())
 
 
 // link: verifyJWT token function
-// const verifyJWT = (req, res, next) => {
-//     const authHeader = req.headers.authorization;
-//     // console.log(authHeader);
+const verifyJWT = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    // console.log(authHeader);
 
-//     if (!authHeader) {
-//         return res.status(401).send('Unauthorized access')
-//     }
+    if (!authHeader) {
+        return res.status(401).send('Unauthorized access')
+    }
 
-//     const token = authHeader.split(' ')[1];
+    const token = authHeader.split(' ')[1];
 
-//     jwt.verify(token, process.env.JWT_TOKEN_SECRET, (error, decoded) => {
-//         if (error) {
-//             return res.status(403).send({
-//                 message: "forbidden access"
-//             })
-//         }
-//         req.decoded = decoded
-//         next()
+    jwt.verify(token, process.env.JWT_TOKEN_SECRET, (error, decoded) => {
+        if (error) {
+            return res.status(403).send({
+                message: "forbidden access"
+            })
+        }
+        req.decoded = decoded
+        next()
 
-//     })
-// }
+    })
+}
 
 
 
@@ -93,26 +93,25 @@ app.post('/products', async (req, res) => {
 
 
 // link: jwt validation
-// app.get('/jwt', async (req, res) => {
-//     try {
-//         const email = req.query.email;
-//         const query = { email: email };
-//         const user = await UsersCollection.findOne(query)
-
-//         if (user) {
-//             const token = jwt.sign(user, process.env.JWT_TOKEN_SECRET, { expiresIn: '7d' });
-//             return res.send({
-//                 success: true,
-//                 token: token
-//             })
-//         }
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-// })
+app.get('/jwt', async (req, res) => {
+    try {
+        const email = req.query.email;
+        const query = { email: email };
+        const user = await UsersCollection.findOne(query);
+        if (user) {
+            const token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: '7d' });
+            return res.send({
+                success: true,
+                token: token
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 // TODO: Verify admin
 // const verifyAdmin = async (req, res, next) => {
@@ -228,9 +227,15 @@ app.get('/product/:id', async (req, res) => {
     }
 })
 // get all products
-app.get('/products', async (req, res) => {
+app.get('/products', verifyJWT, async (req, res) => {
     try {
         const email = req.query.email;
+        const decodedEmail = req.decoded.email;
+
+        if (email !== decodedEmail) {
+            res.status(403).send({ message: 'forbidden access' })
+        }
+
         const query = { email: email }
         const products = await ProductsCollection.find(query).toArray()
         res.send({
