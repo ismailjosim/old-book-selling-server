@@ -17,7 +17,6 @@ app.use(express.json())
 // link: verifyJWT token function
 const verifyJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    // console.log(authHeader);
 
     if (!authHeader) {
         return res.status(401).send('Unauthorized access')
@@ -69,7 +68,7 @@ app.get('/', (req, res) => {
 
 
 // script: add new products to database
-app.post('/products', async (req, res) => {
+app.post('/products', verifyJWT, async (req, res) => {
     try {
         const product = req.body;
         const products = await ProductsCollection.insertOne(product);
@@ -118,13 +117,10 @@ app.get('/categories', async (req, res) => {
     try {
         const query = {}
         const categories = await CategoriesCollection.find(query).toArray();
-
         res.send({
             success: true,
             categories: categories
-
         })
-
     } catch (error) {
         res.send({
             success: false,
@@ -134,11 +130,8 @@ app.get('/categories', async (req, res) => {
 })
 
 
-
-
-
 // TODO: 02: get products according to products categories
-app.get('/product/:id', async (req, res) => {
+app.get('/product/:id', verifyJWT, async (req, res) => {
     try {
         const id = req.params.id;
         const query = { categories_id: parseInt(id) }
@@ -148,8 +141,6 @@ app.get('/product/:id', async (req, res) => {
             success: true,
             books: books
         })
-
-
     } catch (error) {
         res.send({
             success: false,
@@ -186,8 +177,6 @@ app.get('/products', verifyJWT, async (req, res) => {
 app.delete('/product/:id', verifyJWT, async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id);
-
         const query = { _id: ObjectId(id) }
         const product = await ProductsCollection.deleteOne(query);
 
@@ -225,7 +214,7 @@ app.post('/users', async (req, res) => {
 })
 
 // get all user and show them according to their role
-app.get('/users', async (req, res) => {
+app.get('/users', verifyJWT, async (req, res) => {
     try {
         const query = {};
         const users = await UsersCollection.find(query).toArray();
@@ -234,9 +223,6 @@ app.get('/users', async (req, res) => {
             success: false,
             users: users
         })
-
-
-
     } catch (error) {
         res.send({
             success: false,
@@ -292,7 +278,7 @@ app.patch('/users/verify/:id', verifyJWT, async (req, res) => {
 
 })
 // Link: Prevent accessing Admin route via URL
-app.get('/users/admin/:email', async (req, res) => {
+app.get('/users/admin/:email', verifyJWT, async (req, res) => {
     try {
         const email = req.params.email;
         const query = { email }
@@ -310,7 +296,7 @@ app.get('/users/admin/:email', async (req, res) => {
 })
 
 // Link: Prevent accessing seller route via URL
-app.get('/users/seller/:email', async (req, res) => {
+app.get('/users/seller/:email', verifyJWT, async (req, res) => {
     try {
         const email = req.params.email;
         const query = { email }
@@ -328,7 +314,7 @@ app.get('/users/seller/:email', async (req, res) => {
 })
 
 // Link: Prevent accessing seller route via URL
-app.get('/users/buyer/:email', async (req, res) => {
+app.get('/users/buyer/:email', verifyJWT, async (req, res) => {
     try {
         const email = req.params.email;
         const query = { email }
@@ -367,7 +353,7 @@ app.post('/orders', async (req, res) => {
 
 // Link: 05 : show all products
 
-app.get('/orders', async (req, res) => {
+app.get('/orders', verifyJWT, async (req, res) => {
     try {
         const email = req.query.email;
         const query = { email: email }
@@ -386,9 +372,6 @@ app.get('/orders', async (req, res) => {
         })
     }
 })
-
-
-
 
 // listen app
 app.listen(port, () => console.log(`Server Running on Port ${ port }`.random.bold))
