@@ -40,9 +40,6 @@ const verifyJWT = (req, res, next) => {
 
 
 
-
-
-
 // section: URI & Create Client
 const uri = `mongodb+srv://${ process.env.DB_USER }:${ process.env.DB_PASSWORD }@cluster0.s9x13go.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -112,56 +109,6 @@ app.get('/jwt', async (req, res) => {
         })
     }
 })
-
-// TODO: Verify admin
-// const verifyAdmin = async (req, res, next) => {
-//     try {
-//         const decodedEmail = req.decoded.email;
-
-//         const query = { email: decodedEmail }
-//         const user = await UsersCollection.findOne(query);
-
-//         if (user?.role !== 'admin') {
-//             return res.status(403).send({ message: "Forbidden access" })
-//         }
-//         next()
-
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-// }
-// TODO: update user details
-// app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
-
-//     try {
-//         const id = req.params.id;
-//         const filter = { _id: ObjectId(id) };
-//         const options = { upsert: true };
-//         const updateDoc = {
-//             $set: {
-//                 role: 'admin'
-//             }
-//         }
-//         const admin = await UsersCollection.updateOne(filter, updateDoc, options)
-
-//         res.send({
-//             success: true,
-//             admin: admin
-//         })
-
-
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-// })
-
-
 
 
 
@@ -235,7 +182,27 @@ app.get('/products', verifyJWT, async (req, res) => {
     }
 })
 
+// Delete Products from database
+app.delete('/product/:id', verifyJWT, async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
 
+        const query = { _id: ObjectId(id) }
+        const product = await ProductsCollection.deleteOne(query);
+
+        res.send({
+            success: true,
+            product: product
+        })
+
+    } catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 
 
@@ -380,53 +347,6 @@ app.get('/users/buyer/:email', async (req, res) => {
 
 
 
-
-// app.put('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
-
-//     try {
-//         const id = req.params.id;
-//         const filter = { _id: ObjectId(id) };
-//         const options = { upsert: true };
-//         const updateDoc = {
-//             $set: {
-//                 role: 'admin'
-//             }
-//         }
-//         const admin = await UsersCollection.updateOne(filter, updateDoc, options)
-
-//         res.send({
-//             success: true,
-//             admin: admin
-//         })
-
-
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-// })
-
-
-
-
-
-// TODO: Add new Price elment to ===> Database =>
-// app.get('/status', async (req, res) => {
-//     const filter = {}
-//     const options = { upsert: true }
-//     const updateDoc = {
-//         $set: {
-//             username: "person"
-//         }
-//     }
-//     const result = await UsersCollection.updateMany(filter, updateDoc, options);
-//     res.send(result)
-// })
-
-
-
 // Link: 04 : save cart Products to database
 app.post('/orders', async (req, res) => {
     try {
@@ -466,13 +386,6 @@ app.get('/orders', async (req, res) => {
         })
     }
 })
-
-
-
-
-
-
-
 
 
 
